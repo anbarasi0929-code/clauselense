@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | ClauseLens</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .about-container {
+            max-width: 1050px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .about-hero {
+            text-align: center;
+            padding: 45px 25px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #eaf2ff, #f5f0ff);
+            margin-bottom: 30px;
+        }
+
+        .about-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .about-hero p {
+            max-width: 700px;
+            margin: auto;
+            line-height: 1.8;
+        }
+
+        .about-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 22px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+        }
+
+        .about-card h2 {
+            margin-top: 0;
+            color: #263b68;
+        }
+
+        .about-card p,
+        .about-card li {
+            line-height: 1.8;
+            color: #4b5563;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
+        }
+
+        .feature-item {
+            padding: 18px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .feature-item h3 {
+            margin-top: 0;
+            color: #263b68;
+        }
+
+        .about-note {
+            background: #fff8e6;
+            border-left: 4px solid #eab308;
+            padding: 18px;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 600px) {
+            .about-hero h1 {
+                font-size: 28px;
+            }
+
+            .about-container {
+                margin: 25px auto;
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="navbar">
+    <a class="brand" href="index.html">
+        <span class="brand-icon">C</span>
+        <span>ClauseLens<small>Contract Risk Flagger</small></span>
+    </a>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="features.html">Features</a>
+    <a href="how-it-works.html">How It Works</a>
+    <a href="analyze.html">Analyze</a>
+    <a href="results.html">Result</a>
+    <a href="history.html">History</a>
+    <a class="active" href="about.html">About</a>
+</nav>
+
+        <a class="nav-button" href="index.html#upload">New Review ↗</a>
+    </header>
+
+
+
+
+<main class="about-container">
+
+    <section class="about-hero">
+        <h1>About ClauseLens</h1>
+        <p>
+            Making contract review easier to understand by identifying
+            clauses that may need attention and explaining why they matter.
+        </p>
+    </section>
+
+    <section class="about-card">
+        <h2>Our Project</h2>
+        <p>
+            ClauseLens is a contract risk-flagging application designed to
+            help users review digital contracts. It extracts text from
+            supported documents, checks for potential risk areas, and
+            presents findings with explanations and relevant clause evidence.
+        </p>
+    </section>
+
+    <section class="about-card">
+        <h2>Project Objectives</h2>
+        <ul>
+            <li>Allow users to upload supported contract documents.</li>
+            <li>Extract readable text from documents.</li>
+            <li>Identify clauses that may require further review.</li>
+            <li>Explain why a clause has been flagged.</li>
+            <li>Help users organize and review previous analyses.</li>
+        </ul>
+    </section>
+
+    <section class="about-card">
+        <h2>Key Features</h2>
+
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>📄 Document Upload</h3>
+                <p>Upload supported PDF, DOCX, JPG, JPEG, and PNG files.</p>
+            </div>
+
+            <div class="feature-item">
+                <h3>🔍 Clause Analysis</h3>
+                <p>Check contract text for potential risk indicators.</p>
+            </div>
+
+            <div class="feature-item">
+                <h3>💡 Clear Explanations</h3>
+                <p>Understand why a particular clause may deserve attention.</p>
+            </div>
+
+            <div class="feature-item">
+                <h3>📚 Review History</h3>
+                <p>View previous reviews when history storage is connected.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-card">
+        <h2>How It Works</h2>
+        <ol>
+            <li>Upload a contract document.</li>
+            <li>Extract text from the uploaded file.</li>
+            <li>Check the extracted text against defined risk indicators and any requirements supplied by the user.</li>
+            <li>Display potential risks with explanations and supporting text.</li>
+            <li>Review the findings and decide whether professional advice is needed.</li>
+        </ol>
+    </section>
+
+    <section class="about-card">
+        <h2>Technology Used</h2>
+        <ul>
+            <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+            <li><strong>Backend:</strong> Python and Flask</li>
+            <li><strong>Database:</strong> MySQL</li>
+            <li><strong>Document processing:</strong> PyMuPDF and python-docx</li>
+            <li><strong>OCR:</strong> Tesseract for supported scanned documents, when configured</li>
+        </ul>
+    </section>
+
+    <section class="about-card">
+        <h2>Important Disclaimer</h2>
+        <div class="about-note">
+            ClauseLens is a project intended to assist with contract review.
+            Its flags are indicators for further examination, not definitive
+            legal conclusions. It does not replace a qualified legal
+            professional, and a flagged clause is not necessarily unlawful
+            or unacceptable.
+        </div>
+    </section>
+
+</main>
+
+<footer style="text-align:center; padding:25px; color:#6b7280;">
+    <p>ClauseLens — Contract Risk Flagger</p>
+</footer>
+
+</body>
+</html>

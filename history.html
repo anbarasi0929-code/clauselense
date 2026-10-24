@@ -1,0 +1,525 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review History | ClauseLens</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .history-page {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 45px 25px 70px;
+        }
+
+        .history-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .history-header h1 {
+            margin-top: 10px;
+            color: #14233f;
+            font-size: 32px;
+            letter-spacing: -1px;
+        }
+
+        .history-header p {
+            margin-top: 6px;
+            color: #68758a;
+            font-size: 14px;
+        }
+
+        .history-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .history-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            padding: 22px;
+            border: 1px solid #e1e7f0;
+            border-radius: 13px;
+            background: white;
+        }
+
+        .summary-card p {
+            color: #68758a;
+            font-size: 12px;
+        }
+
+        .summary-card h2 {
+            margin-top: 9px;
+            color: #14233f;
+            font-size: 30px;
+        }
+
+        .blue { color: #4968e8 !important; }
+        .orange { color: #b96b15 !important; }
+        .green { color: #16885e !important; }
+
+        .history-panel {
+            overflow: hidden;
+            border: 1px solid #e1e7f0;
+            border-radius: 14px;
+            background: white;
+        }
+
+        .panel-header {
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .panel-header h2 {
+            color: #14233f;
+            font-size: 19px;
+        }
+
+        .panel-header p {
+            margin-top: 5px;
+            color: #68758a;
+            font-size: 12px;
+        }
+
+        .history-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .history-filters input,
+        .history-filters select {
+            min-width: 150px;
+            padding: 10px 12px;
+            border: 1px solid #e1e7f0;
+            border-radius: 8px;
+            background: white;
+            color: #344054;
+            font: inherit;
+            font-size: 12px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .history-table th {
+            padding: 14px 18px;
+            background: #f7f8fc;
+            color: #68758a;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .history-table td {
+            padding: 17px 18px;
+            border-top: 1px solid #edf0f5;
+            color: #344054;
+            font-size: 12px;
+        }
+
+        .file-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-icon {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 9px;
+            background: #edf0ff;
+            color: #4968e8;
+            font-size: 18px;
+        }
+
+        .file-name {
+            font-weight: 700;
+            color: #202b40;
+        }
+
+        .file-type {
+            margin-top: 3px;
+            color: #8791a3;
+            font-size: 10px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .status.complete {
+            background: #e8f6ee;
+            color: #16734d;
+        }
+
+        .status.demo {
+            background: #fff0df;
+            color: #9a5b15;
+        }
+
+        .view-link {
+            color: #4968e8;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .view-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty-state {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 15px;
+            border-radius: 16px;
+            background: #edf0ff;
+            color: #4968e8;
+            font-size: 28px;
+        }
+
+        .empty-state h3 {
+            color: #14233f;
+            font-size: 17px;
+        }
+
+        .empty-state p {
+            max-width: 390px;
+            margin: 8px auto 20px;
+            color: #68758a;
+            font-size: 13px;
+        }
+
+        .history-notice {
+            margin-top: 22px;
+            padding: 16px;
+            border: 1px solid #d7e2fc;
+            border-radius: 10px;
+            background: #f3f6ff;
+            color: #435a9d;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 700px) {
+            .history-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .history-page {
+                padding: 30px 16px 50px;
+            }
+
+            .history-header h1 {
+                font-size: 27px;
+            }
+
+            .history-filters,
+            .history-filters input,
+            .history-filters select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <a class="brand" href="index.html">
+            <span class="brand-icon">C</span>
+            <span>ClauseLens
+                <small>Contract Risk Flagger</small>
+            </span>
+        </a>
+
+        <nav>
+    <a href="index.html">Home</a>
+    <a href="features.html">Features</a>
+    <a href="how-it-works.html">How It Works</a>
+    <a href="analyze.html">Analyze</a>
+    <a href="results.html">Result</a>
+    <a class="active" href="history.html">History</a>
+    <a href="about.html">About</a>
+</nav>
+
+        <a class="nav-button" href="index.html#upload">New Review ↗</a>
+    </header>
+
+    <main class="history-page">
+        <div class="history-header">
+            <div>
+                <span class="eyebrow">YOUR REVIEWS</span>
+                <h1>Review History</h1>
+                <p>View and search previous contract review records.</p>
+            </div>
+
+            <div class="history-actions">
+                <a href="index.html#upload" class="primary-button">
+                    + New Review
+                </a>
+            </div>
+        </div>
+
+        <div class="history-summary">
+            <article class="summary-card">
+                <p>Total Reviews</p>
+                <h2 class="blue" id="totalReviews">0</h2>
+            </article>
+
+            <article class="summary-card">
+                <p>Completed Reviews</p>
+                <h2 class="green" id="completedReviews">0</h2>
+            </article>
+
+            <article class="summary-card">
+                <p>Needs Attention</p>
+                <h2 class="orange" id="attentionReviews">0</h2>
+            </article>
+        </div>
+
+        <section class="history-panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Previous Reviews</h2>
+                    <p>Search by document name or filter by status.</p>
+                </div>
+
+                <div class="history-filters">
+                    <input
+                        type="search"
+                        id="searchInput"
+                        placeholder="Search documents..."
+                        aria-label="Search document names">
+
+                  <select id="statusFilter" aria-label="Filter by status">
+    <option value="all">All statuses</option>
+    <option value="complete">Completed</option>
+    <option value="attention">Needs Attention</option>
+</select>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>DOCUMENT</th>
+                            <th>REVIEW DATE</th>
+                            <th>FLAGS</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+<tbody id="historyTable">
+    <tr>
+        <td colspan="5">Loading review history...</td>
+    </tr>
+</tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" id="emptyState" hidden>
+                <div class="empty-icon">⌕</div>
+                <h3>No matching reviews</h3>
+                <p>Try another search term or change the status filter.</p>
+            </div>
+        </section>
+
+        <div class="history-notice">
+    <strong>Live review history:</strong>
+    Contract analyses are loaded from the MongoDB database.
+</div>
+    </main>
+
+    <footer>
+        <a class="brand footer-brand" href="index.html">
+            <span class="brand-icon">C</span>
+            <span>ClauseLens
+                <small>Contract Risk Flagger</small>
+            </span>
+        </a>
+
+        <p>Helping you review contract terms with greater clarity.</p>
+        <span>© 2026 ClauseLens · Student Project</span>
+    </footer>
+
+<script>
+const searchInput = document.getElementById("searchInput");
+const statusFilter = document.getElementById("statusFilter");
+const tableBody = document.getElementById("historyTable");
+const emptyState = document.getElementById("emptyState");
+
+let reviews = [];
+
+function filterHistory() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const selectedStatus = statusFilter.value;
+    let visibleCount = 0;
+
+    tableBody.querySelectorAll("tr[data-status]").forEach(row => {
+        const name = row.dataset.filename.toLowerCase();
+
+        const matchesName = name.includes(searchTerm);
+        const matchesStatus =
+            selectedStatus === "all" ||
+            row.dataset.status === selectedStatus;
+
+        row.hidden = !(matchesName && matchesStatus);
+
+        if (!row.hidden) visibleCount++;
+    });
+
+    emptyState.hidden = visibleCount !== 0;
+}
+
+async function loadHistory() {
+    try {
+        const response = await fetch("http://127.0.0.1:5000/api/history");
+
+        if (!response.ok) {
+            throw new Error("Unable to load review history.");
+        }
+
+        const data = await response.json();
+        reviews = data.reviews || [];
+
+        document.getElementById("totalReviews").textContent =
+            data.total_reviews ?? reviews.length;
+
+        document.getElementById("completedReviews").textContent =
+            data.completed_reviews ?? 0;
+
+        document.getElementById("attentionReviews").textContent =
+            data.needs_attention ?? 0;
+
+        tableBody.replaceChildren();
+
+        reviews.forEach(review => {
+            const row = document.createElement("tr");
+            const status = review.status === "Completed"
+                ? "complete"
+                : "attention";
+
+            row.dataset.status = status;
+            row.dataset.filename = review.filename || "Unnamed contract";
+
+            const date = review.review_date
+                ? new Date(review.review_date).toLocaleString()
+                : "Unknown";
+
+            const fileCell = document.createElement("td");
+            const fileContainer = document.createElement("div");
+            fileContainer.className = "file-cell";
+
+            const icon = document.createElement("span");
+            icon.className = "file-icon";
+            icon.textContent = "▤";
+
+            const details = document.createElement("div");
+            const name = document.createElement("div");
+            name.className = "file-name";
+            name.textContent = row.dataset.filename;
+
+            const type = document.createElement("div");
+            type.className = "file-type";
+            type.textContent = row.dataset.filename.split(".").pop().toUpperCase()
+                + " document";
+
+            details.append(name, type);
+            fileContainer.append(icon, details);
+            fileCell.append(fileContainer);
+
+            const dateCell = document.createElement("td");
+            dateCell.textContent = date;
+
+            const flagsCell = document.createElement("td");
+            flagsCell.textContent = review.flags ?? 0;
+
+            const statusCell = document.createElement("td");
+            const badge = document.createElement("span");
+            badge.className = "status " + status;
+            badge.textContent = review.status === "Completed"
+                ? "COMPLETED"
+                : "NEEDS ATTENTION";
+            statusCell.append(badge);
+
+            const actionCell = document.createElement("td");
+            const link = document.createElement("a");
+            link.className = "view-link";
+            link.href = "results.html";
+            link.textContent = "View result";
+            link.addEventListener("click", () => {
+                sessionStorage.setItem(
+                    "clauseLensHistoryResult",
+                    JSON.stringify(review)
+                );
+            });
+            actionCell.append(link);
+
+            row.append(fileCell, dateCell, flagsCell, statusCell, actionCell);
+            tableBody.append(row);
+        });
+
+        filterHistory();
+
+    } catch (error) {
+        tableBody.replaceChildren();
+
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 5;
+        cell.textContent =
+            "Could not load history. Check that the Flask backend is running.";
+        row.append(cell);
+        tableBody.append(row);
+
+        console.error("History loading error:", error);
+    }
+}
+
+searchInput.addEventListener("input", filterHistory);
+statusFilter.addEventListener("change", filterHistory);
+
+loadHistory();
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyze Contract | ClauseLens</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+<header class="navbar">
+    <a class="brand" href="index.html">
+        <span class="brand-icon">C</span>
+        <span>ClauseLens<small>Contract Risk Flagger</small></span>
+    </a>
+<nav>
+    <a href="index.html">Home</a>
+    <a href="features.html">Features</a>
+    <a href="how-it-works.html">How It Works</a>
+    <a class="active" href="analyze.html">Analyze</a>
+    <a href="results.html">Result</a>
+    <a href="history.html">History</a>
+    <a href="about.html">About</a>
+</nav>
+
+    <a class="nav-button" href="analyze.html">Review Contract ↗</a>
+</header>
+
+<main class="upload-section" id="upload">
+    <div class="section-heading">
+        <span class="eyebrow">START YOUR REVIEW</span>
+        <h2>Upload your contract</h2>
+        <p>Choose a document to begin checking for clauses that may need attention.</p>
+    </div>
+
+    <form id="uploadForm" action="/" method="POST"
+          enctype="multipart/form-data">
+
+        <label class="upload-box" id="dropZone" for="contractFile">
+            <span class="upload-icon">↑</span>
+            <strong id="uploadTitle">Drop your contract here</strong>
+            <span id="uploadText">or click to browse your computer</span>
+            <span class="file-types">PDF · DOCX · JPG · JPEG · PNG</span>
+
+            <input type="file" id="contractFile" name="file"
+                   accept=".pdf,.docx,.jpg,.jpeg,.png" required>
+        </label>
+
+        <div class="file-info" id="fileInfo" hidden>
+            <span class="file-symbol">▤</span>
+            <span id="fileName"></span>
+            <button type="button" id="removeFile"
+                    aria-label="Remove selected file">✕</button>
+        </div>
+
+        <div class="requirements-field">
+            <label for="requirements">Specific requirements (optional)</label>
+            <textarea id="requirements" name="requirements" rows="3"
+                placeholder="Example: Check payment deadlines, renewal terms, and liability limits."></textarea>
+            <small>Additional requirements are used when supported by the backend.</small>
+        </div>
+
+        <p class="form-message" id="formMessage" role="status"></p>
+
+        <button class="primary-button submit-button"
+                type="submit" id="submitButton">
+            Analyze Contract <span>→</span>
+        </button>
+
+        <p class="privacy-note">
+            Upload only documents you are authorized to use.
+        </p>
+    </form>
+</main>
+
+<footer>
+    <a class="brand footer-brand" href="index.html">
+        <span class="brand-icon">C</span>
+        <span>ClauseLens<small>Contract Risk Flagger</small></span>
+    </a>
+    <p>Helping you review contract terms with greater clarity.</p>
+    <span>© 2026 ClauseLens · Student Project</span>
+</footer>
+
+</body>
+</html>

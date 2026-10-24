@@ -1,0 +1,726 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results | ClauseLens</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body { background: #f7f8fc; }
+
+        .results-page {
+            max-width: 1150px;
+            margin: auto;
+            padding: 42px 25px 65px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .results-header h1 {
+            color: #14233f;
+            font-size: 32px;
+            letter-spacing: -1px;
+            margin-top: 8px;
+        }
+
+        .results-header p {
+            color: #68758a;
+            font-size: 14px;
+            margin-top: 7px;
+        }
+
+        .back-link {
+            color: #4968e8;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .notice {
+            padding: 14px 17px;
+            margin-bottom: 22px;
+            border: 1px solid #d7e2fc;
+            border-radius: 10px;
+            background: #f3f6ff;
+            color: #3452a5;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .notice.error {
+            background: #fff1f1;
+            border-color: #f2caca;
+            color: #a52d2d;
+        }
+
+        .contract-card {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+            margin-bottom: 27px;
+            border: 1px solid #e1e7f0;
+            border-radius: 13px;
+            background: white;
+        }
+
+        .contract-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #edf0ff;
+            color: #4968e8;
+            font-size: 25px;
+        }
+
+        .contract-details { flex: 1; min-width: 160px; }
+
+        .contract-details h3 {
+            color: #202b40;
+            font-size: 15px;
+            overflow-wrap: anywhere;
+        }
+
+        .contract-details p {
+            color: #68758a;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .tag {
+            padding: 6px 10px;
+            border-radius: 6px;
+            background: #e8f6ee;
+            color: #16734d;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            padding: 21px;
+            border: 1px solid #e1e7f0;
+            border-radius: 13px;
+            background: white;
+        }
+
+        .summary-card p { color: #68758a; font-size: 12px; }
+
+        .summary-card h2 {
+            margin: 10px 0 5px;
+            color: #14233f;
+            font-size: 31px;
+        }
+
+        .summary-card small { color: #68758a; font-size: 11px; }
+
+        .blue { color: #4968e8 !important; }
+        .red { color: #c24141 !important; }
+        .orange { color: #b96b15 !important; }
+        .green { color: #16885e !important; }
+
+        .section-title {
+            margin: 30px 0 16px;
+            color: #14233f;
+            font-size: 22px;
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .filter-row label {
+            color: #68758a;
+            font-size: 12px;
+        }
+
+        .filter-row select {
+            padding: 10px 12px;
+            border: 1px solid #e1e7f0;
+            border-radius: 8px;
+            background: white;
+            color: #344054;
+            font: inherit;
+            font-size: 12px;
+        }
+
+        .risk-card {
+            padding: 21px;
+            margin-bottom: 16px;
+            border: 1px solid #e1e7f0;
+            border-radius: 13px;
+            background: white;
+        }
+
+        .risk-card[hidden] { display: none; }
+
+        .risk-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .risk-title-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .risk-symbol {
+            width: 37px;
+            height: 37px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: #fff0df;
+            color: #a45d11;
+            font-weight: 800;
+        }
+
+        .risk-symbol.high { background: #fde8e8; color: #b42318; }
+        .risk-symbol.low { background: #e8f6ee; color: #16734d; }
+
+        .risk-title-group h3 {
+            color: #202b40;
+            font-size: 16px;
+        }
+
+        .risk-title-group p {
+            margin-top: 5px;
+            color: #68758a;
+            font-size: 12px;
+        }
+
+        .risk-badge {
+            padding: 6px 9px;
+            border-radius: 6px;
+            background: #fff0df;
+            color: #9a5b15;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .risk-badge.high { background: #fde8e8; color: #b42318; }
+        .risk-badge.low { background: #e8f6ee; color: #16734d; }
+
+        .risk-category {
+            display: inline-block;
+            margin-top: 16px;
+            color: #4968e8;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .evidence-box {
+            margin-top: 13px;
+            padding: 14px;
+            border-left: 3px solid #4968e8;
+            border-radius: 0 8px 8px 0;
+            background: #f6f8fc;
+        }
+
+        .evidence-box strong {
+            display: block;
+            margin-bottom: 7px;
+            color: #43516b;
+            font-size: 11px;
+        }
+
+        .evidence-box blockquote {
+            color: #344054;
+            font-size: 13px;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .evidence-box small {
+            display: block;
+            margin-top: 8px;
+            color: #68758a;
+            font-size: 11px;
+        }
+
+        .explanation {
+            margin-top: 14px;
+            color: #59657a;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .review-tip {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #f0faf5;
+            color: #28684e;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .empty-state {
+            padding: 30px 20px;
+            border: 1px dashed #cbd5eb;
+            border-radius: 12px;
+            color: #68758a;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .bottom-actions {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .outline-button, .print-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 17px;
+            border: 1px solid #e1e7f0;
+            border-radius: 9px;
+            background: white;
+            color: #202b40;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .print-button {
+            background: #4968e8;
+            color: white;
+            border-color: #4968e8;
+        }
+
+        .disclaimer {
+            margin-top: 30px;
+            padding: 18px;
+            border: 1px solid #f1dfb8;
+            border-radius: 10px;
+            background: #fffbf2;
+            color: #786b50;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 800px) {
+            .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 480px) {
+            .results-page { padding: 28px 15px 45px; }
+            .results-header h1 { font-size: 26px; }
+            .summary-grid { gap: 10px; }
+            .summary-card { padding: 14px; }
+            .summary-card h2 { font-size: 25px; }
+            .risk-card { padding: 15px; }
+            .filter-row select { max-width: 100%; }
+        }
+
+        @media print {
+            .navbar, footer, .filter-row, .bottom-actions, .back-link {
+                display: none !important;
+            }
+
+            body { background: white; }
+            .results-page { max-width: none; padding: 10px; }
+            .risk-card, .summary-card, .contract-card {
+                break-inside: avoid;
+                box-shadow: none;
+            }
+
+            .risk-card[hidden] { display: block !important; }
+        }
+    </style>
+</head>
+
+<body>
+<header class="navbar">
+    <a class="brand" href="index.html">
+        <span class="brand-icon">C</span>
+        <span>ClauseLens<small>Contract Risk Flagger</small></span>
+    </a>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="analyze.html">Analyze</a>
+        <a class="active" href="results.html">Result</a>
+        <a href="history.html">History</a>
+        <a href="about.html">About</a>
+    </nav>
+
+    <a class="nav-button" href="index.html#upload">New Review ↗</a>
+</header>
+
+<main class="results-page">
+    <div class="results-header">
+        <div>
+            <span class="eyebrow">CONTRACT ANALYSIS</span>
+            <h1>Analysis Results</h1>
+            <p>Review potential concerns and understand why they may matter.</p>
+        </div>
+        <a class="back-link" href="history.html">← Review History</a>
+    </div>
+
+    <div class="notice" id="statusNotice" role="status">
+        Loading contract analysis...
+    </div>
+
+    <section class="contract-card" aria-label="Contract information">
+        <div class="contract-icon">▤</div>
+        <div class="contract-details">
+            <h3 id="contractFilename">Loading contract...</h3>
+            <p id="contractMeta">Retrieving analysis information.</p>
+        </div>
+        <span class="tag" id="resultTag">LOADING</span>
+    </section>
+
+    <section aria-label="Risk summary">
+        <h2 class="section-title">Review Summary</h2>
+
+        <div class="summary-grid">
+            <article class="summary-card">
+                <p>Clauses flagged</p>
+                <h2 class="blue" id="totalCount">0</h2>
+                <small>Potential flags found</small>
+            </article>
+            <article class="summary-card">
+                <p>High priority</p>
+                <h2 class="red" id="highCount">0</h2>
+                <small>Review promptly</small>
+            </article>
+            <article class="summary-card">
+                <p>Medium priority</p>
+                <h2 class="orange" id="mediumCount">0</h2>
+                <small>Check the wording</small>
+            </article>
+            <article class="summary-card">
+                <p>Low priority</p>
+                <h2 class="green" id="lowCount">0</h2>
+                <small>Consider reviewing</small>
+            </article>
+        </div>
+    </section>
+
+    <section aria-labelledby="findingsHeading">
+        <h2 class="section-title" id="findingsHeading">Flagged Clauses</h2>
+
+        <div class="filter-row">
+            <label for="priorityFilter">Priority:</label>
+            <select id="priorityFilter">
+                <option value="all">All priorities</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+
+            <label for="categoryFilter">Category:</label>
+            <select id="categoryFilter">
+                <option value="all">All categories</option>
+                <option value="termination">Termination</option>
+                <option value="payment">Payment</option>
+                <option value="liability">Liability</option>
+                <option value="indemnity">Indemnity</option>
+                <option value="confidentiality">Confidentiality</option>
+                <option value="automatic renewal">Automatic Renewal</option>
+                <option value="dispute resolution">Dispute Resolution</option>
+                <option value="unilateral changes">Unilateral Changes</option>
+                <option value="intellectual property">Intellectual Property</option>
+                <option value="non-compete">Non-compete / Exclusivity</option>
+                <option value="governing law">Governing Law</option>
+                <option value="penalty">Penalty / Late Fee</option>
+                <option value="data protection">Data Protection</option>
+            </select>
+        </div>
+
+        <div id="findingsContainer"></div>
+
+        <div class="empty-state" id="emptyState" hidden>
+            No findings match these filters.
+        </div>
+    </section>
+
+    <div class="bottom-actions">
+        <a class="outline-button" href="analyze.html">← Analyze another contract</a>
+        <button class="print-button" id="printButton" type="button">Print Results ↗</button>
+    </div>
+
+    <aside class="disclaimer">
+        <strong>Important notice</strong>
+        <p>
+            ClauseLens is a contract-review aid, not a substitute for professional legal advice.
+            A flagged clause is a prompt for further review, not a conclusion that it is illegal
+            or unacceptable. Automated flags are preliminary and should be checked against the
+            full contract. Do not rely on this tool alone to make legal decisions.
+        </p>
+    </aside>
+</main>
+
+<footer>
+    <a class="brand footer-brand" href="index.html">
+        <span class="brand-icon">C</span>
+        <span>ClauseLens<small>Contract Risk Flagger</small></span>
+    </a>
+    <p>Helping you review contract terms with greater clarity.</p>
+    <span>© 2026 ClauseLens · Student Project</span>
+</footer>
+
+<script>
+"use strict";
+
+const priorityFilter = document.getElementById("priorityFilter");
+const categoryFilter = document.getElementById("categoryFilter");
+const findingsContainer = document.getElementById("findingsContainer");
+const emptyState = document.getElementById("emptyState");
+const statusNotice = document.getElementById("statusNotice");
+
+const historyText = sessionStorage.getItem("clauseLensHistoryResult");
+const resultText = sessionStorage.getItem("clauseLensResult");
+
+let analysis = null;
+
+try {
+    analysis = historyText
+        ? JSON.parse(historyText)
+        : resultText
+            ? JSON.parse(resultText)
+            : null;
+} catch (error) {
+    console.error("Could not read saved analysis:", error);
+}
+
+function safeText(value, fallback = "Not provided") {
+    if (value === null || value === undefined || String(value).trim() === "") {
+        return fallback;
+    }
+    return String(value);
+}
+
+function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+function normalizePriority(value) {
+    const priority = String(value || "medium").toLowerCase();
+
+    if (priority.includes("high") || priority.includes("critical")) return "high";
+    if (priority.includes("low") || priority.includes("info")) return "low";
+
+    return "medium";
+}
+
+function getFindings(data) {
+    if (!data) return [];
+
+    const findings = data.findings || data.flags || data.risks || data.results || [];
+    return Array.isArray(findings) ? findings : [];
+}
+
+function renderFinding(item) {
+    const category = safeText(
+        item.category || item.title || item.type || item.risk_type,
+        "Potential Risk"
+    );
+
+    const title = safeText(
+        item.title || item.name || item.category || item.type,
+        "Potential Risk"
+    );
+
+    const originalPriority = safeText(
+        item.priority || item.severity || item.risk_level,
+        "Medium"
+    );
+
+    const priority = normalizePriority(originalPriority);
+
+    const snippet = safeText(
+        item.snippet || item.clause || item.evidence ||
+        item.matched_text || item.text,
+        "No text excerpt was provided."
+    );
+
+    const explanation = safeText(
+        item.reason || item.explanation || item.description,
+        "Review the full clause and surrounding contract terms."
+    );
+
+    const recommendation = safeText(
+        item.recommendation,
+        "Review this clause carefully."
+    );
+
+    const page = item.page ? `Page ${safeText(item.page)}` : "Page reference unavailable";
+    const categoryKey = category.toLowerCase();
+    const symbol = priority === "high" ? "!" : priority === "low" ? "i" : "•";
+
+    return `
+        <article class="risk-card"
+            data-priority="${priority}"
+            data-category="${escapeHtml(categoryKey)}">
+
+            <div class="risk-top">
+                <div class="risk-title-group">
+                    <span class="risk-symbol ${priority}">${symbol}</span>
+                    <div>
+                        <h3>${escapeHtml(title)}</h3>
+                        <p>Automated finding · ${escapeHtml(originalPriority)} priority</p>
+                    </div>
+                </div>
+                <span class="risk-badge ${priority}">
+                    ${escapeHtml(originalPriority.toUpperCase())} PRIORITY
+                </span>
+            </div>
+
+            <span class="risk-category">${escapeHtml(category.toUpperCase())}</span>
+
+            <div class="evidence-box">
+                <strong>Text flagged for review</strong>
+                <blockquote>${escapeHtml(snippet)}</blockquote>
+                <small>${escapeHtml(page)}</small>
+            </div>
+
+            <p class="explanation">
+                <strong>Why review this?</strong>
+                ${escapeHtml(explanation)}
+            </p>
+
+            <div class="review-tip">
+                <strong>Recommended Action:</strong>
+                ${escapeHtml(recommendation)}
+            </div>
+        </article>
+    `;
+}
+
+function filterFindings() {
+    const selectedPriority = priorityFilter.value;
+    const selectedCategory = categoryFilter.value;
+    const cards = findingsContainer.querySelectorAll(".risk-card");
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+        const matchesPriority =
+            selectedPriority === "all" ||
+            card.dataset.priority === selectedPriority;
+
+        const matchesCategory =
+            selectedCategory === "all" ||
+            card.dataset.category.includes(selectedCategory);
+
+        card.hidden = !(matchesPriority && matchesCategory);
+
+        if (!card.hidden) visibleCount++;
+    });
+
+    emptyState.hidden = visibleCount !== 0;
+    if (visibleCount === 0) {
+        emptyState.textContent = cards.length
+            ? "No findings match these filters. Try another priority or category."
+            : "No potential risks were flagged in this analysis.";
+    }
+}
+
+function showNoData() {
+    statusNotice.classList.add("error");
+    statusNotice.textContent =
+        "No analysis data found. Please open Analyze, upload a PDF or DOCX contract, and run the analysis again.";
+
+    document.getElementById("contractFilename").textContent = "No analysis loaded";
+    document.getElementById("contractMeta").textContent =
+        "No contract information is available in this browser session.";
+    document.getElementById("resultTag").textContent = "NO DATA";
+
+    findingsContainer.replaceChildren();
+    emptyState.hidden = false;
+    emptyState.textContent = "Analyze a contract first to see flagged clauses.";
+}
+
+function displayAnalysis(data) {
+    const filename = safeText(data.filename || data.file_name, "Uploaded contract");
+    const findings = getFindings(data);
+
+    document.getElementById("contractFilename").textContent = filename;
+
+    const characterCount = Number(data.character_count || data.text_length || 0);
+
+    document.getElementById("contractMeta").textContent =
+        `${characterCount.toLocaleString()} characters extracted · ${findings.length} potential finding(s)`;
+
+    document.getElementById("resultTag").textContent =
+        historyText ? "HISTORY" : "ANALYZED";
+
+    statusNotice.classList.remove("error");
+    statusNotice.textContent = historyText
+        ? "Previous review loaded from your saved review history."
+        : "Analysis complete. These automated flags identify clauses that may need further review.";
+
+    findingsContainer.innerHTML = findings.map(renderFinding).join("");
+
+    const counts = { high: 0, medium: 0, low: 0 };
+
+    findings.forEach(item => {
+        counts[normalizePriority(
+            item.priority || item.severity || item.risk_level
+        )]++;
+    });
+
+    document.getElementById("totalCount").textContent = findings.length;
+    document.getElementById("highCount").textContent = counts.high;
+    document.getElementById("mediumCount").textContent = counts.medium;
+    document.getElementById("lowCount").textContent = counts.low;
+
+    filterFindings();
+}
+
+if (analysis) {
+    displayAnalysis(analysis);
+} else {
+    showNoData();
+}
+
+priorityFilter.addEventListener("change", filterFindings);
+categoryFilter.addEventListener("change", filterFindings);
+document.getElementById("printButton").addEventListener("click", () => window.print());
+</script>
+</body>
+</html>
